@@ -55,6 +55,12 @@ VALID_COLUMNS = [
     "execution_time", "rows_scanned", "joins_count"
 ]
 
+REJECTED_COLUMNS = [
+    "ip", "endpoint", "status", "timestamp",
+    "execution_time", "rows_scanned", "joins_count",
+    "line_number", "reason"
+]
+
 
 def needs_header(file_path):
     return (not os.path.exists(file_path)) or os.path.getsize(file_path) == 0
@@ -83,7 +89,7 @@ def ensure_csv_header(file_path, columns):
 
 # create/repair headers
 ensure_csv_header(valid_csv, VALID_COLUMNS)
-ensure_csv_header(rejected_csv, VALID_COLUMNS)
+ensure_csv_header(rejected_csv, REJECTED_COLUMNS)
 
 # =============================================================================
 # 5. HELPERS
@@ -185,7 +191,10 @@ try:
                 if reason:
                     rejected += 1
                     reject_buffer.append((run_id, "api", total, reason, safe_json(row)))
-                    csv_reject_buffer.append(row)
+                    csv_reject_row = dict(row)
+                    csv_reject_row["line_number"] = total
+                    csv_reject_row["reason"] = reason
+                    csv_reject_buffer.append(csv_reject_row)
                 else:
                     inserted += 1
                     cycle_inserted += 1
@@ -224,6 +233,7 @@ try:
                     VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
                 """, valid_buffer)
                 valid_buffer.clear()
+                conn.commit()
 
             if len(reject_buffer) >= 10:
                 cursor.executemany("""
@@ -232,6 +242,7 @@ try:
                     VALUES (%s,%s,%s,%s,%s)
                 """, reject_buffer)
                 reject_buffer.clear()
+                conn.commit()
 
             # =============================================================================
             # CSV BATCH WRITE (NO HEADER DUPLICATION)
@@ -246,7 +257,7 @@ try:
                 csv_valid_buffer.clear()
 
             if len(csv_reject_buffer) >= 25:
-                pd.DataFrame(csv_reject_buffer)[VALID_COLUMNS].to_csv(
+                pd.DataFrame(csv_reject_buffer)[REJECTED_COLUMNS].to_csv(
                     rejected_csv,
                     mode="a",
                     header=needs_header(rejected_csv),
@@ -282,6 +293,22 @@ try:
 except KeyboardInterrupt:
     print("\n🛑 Stopping...")
 
+    if valid_buffer:
+        cursor.executemany("""
+            INSERT INTO system_logs
+            (ip, endpoint, status, timestamp, execution_time, rows_scanned, joins_count, etl_run_id)
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
+        """, valid_buffer)
+        valid_buffer.clear()
+
+    if reject_buffer:
+        cursor.executemany("""
+            INSERT INTO rejected_logs
+            (etl_run_id, source_type, line_number, reason, raw_payload)
+            VALUES (%s,%s,%s,%s,%s)
+        """, reject_buffer)
+        reject_buffer.clear()
+
     if csv_valid_buffer:
         pd.DataFrame(csv_valid_buffer)[VALID_COLUMNS].to_csv(
             valid_csv,
@@ -291,7 +318,7 @@ except KeyboardInterrupt:
         )
 
     if csv_reject_buffer:
-        pd.DataFrame(csv_reject_buffer)[VALID_COLUMNS].to_csv(
+        pd.DataFrame(csv_reject_buffer)[REJECTED_COLUMNS].to_csv(
             rejected_csv,
             mode="a",
             header=needs_header(rejected_csv),
