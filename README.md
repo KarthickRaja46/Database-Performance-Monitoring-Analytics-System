@@ -102,7 +102,7 @@ Cleaned CSV                Rejected CSV
 
 ## 📈 Results
 
-* Processed **15K+** simulated system log records
+* Processed ***20K+*** simulated system log records
 * Achieved high data quality through ETL validation
 * Identified slow endpoints impacting SLA compliance
 * Improved performance using SQL query optimization
