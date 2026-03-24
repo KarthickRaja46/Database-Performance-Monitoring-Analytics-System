@@ -2,7 +2,7 @@
 
 **Real-world ETL + SQL analytics system to monitor database performance, detect SLA breaches, and optimize system health.**  
 
-📌 Built to simulate production-grade monitoring systems  
+📌 Built to simulate real-world production monitoring systems used in backend and API environments 
 📌 Focus: Data quality • Performance analytics • System reliability  
 
 ---
@@ -84,6 +84,15 @@ Cleaned CSV                Rejected CSV
 
 ---
 
+## 📈 Results
+
+- Processed 5000+ simulated system log records  
+- Achieved high data quality through ETL validation  
+- Identified slow endpoints impacting SLA compliance  
+- Improved performance using SQL query optimization  
+
+---
+
 ## 🗂️ Project Structure
 ```
 SQL_PROJECT/
@@ -114,6 +123,8 @@ SQL_PROJECT/
 ![PowerBI](https://img.shields.io/badge/PowerBI-Dashboard-yellow)
 
 ---
+
+
 
 ## 🧮 Key Metrics
 | Metric       | Purpose               |
