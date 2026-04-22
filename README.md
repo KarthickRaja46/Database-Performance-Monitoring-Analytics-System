@@ -64,7 +64,7 @@ Power BI Dashboard
 
 ## 📊 Results & Impact
 
-* Processed **20,000+ API log records**
+* Processed **100,000+ API log records**
 * Improved **data quality via validation pipeline**
 * Identified **SLA breaches & high-latency endpoints**
 * Reduced query execution time using **indexing & optimization**
@@ -94,7 +94,14 @@ Power BI Dashboard
 
 ## 📸 Dashboard Preview
 
-![Dashboard](dashboard/powerbi_screenshot.png)
+### 📊 Key Performance Indicators (KPIs)
+![KPI Metrics](dashboard/KPI.png)
+
+### 📈 Traffic Analysis & Status Distribution
+![Traffic & Status](dashboard/traffic_status.png)
+
+### 🚀 Hourly Traffic & Endpoint Volume
+![Hourly Volume](dashboard/traffic_endpoint.png)
 
 **Insights Delivered:**
 
@@ -138,11 +145,15 @@ python scripts/etl_pipeline.py
 
 ### 4. Execute SQL Analytics
 
-Run queries from the `sql/` folder
+The `sql/` folder contains several scripts for different analytical purposes:
+- `01_kpi_queries.sql`: High-level business metrics (Success Rate, SLA).
+- `02_advanced_analytics.sql`: Latency analysis (P95, P99) and trend tracking.
+- `03_diagnostic_queries.sql`: Identifying specific failure points and high-latency endpoints.
+- `04_alert_triggers.sql`: Automated SQL triggers for incident detection.
 
 ### 5. Open Dashboard
 
-Load `dashboard/performance_monitoring.pbix` in Power BI
+Load `dashboard/performance_monitoring.pbix` in Power BI to visualize the results.
 
 ---
 
@@ -158,6 +169,10 @@ Load `dashboard/performance_monitoring.pbix` in Power BI
 ## 👨‍💻 Author
 
 **Karthick Raja**
-Aspiring Data Analyst | SQL • ETL • Performance Analytics
+*Aspiring Data Analyst | SQL • ETL • Performance Analytics*
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/karthick-raja-l-7a5b3a26b/)
+[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/KarthickRaja46)
+[![Email](https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:karthiikarthii46@gmail.com)
 
 ---

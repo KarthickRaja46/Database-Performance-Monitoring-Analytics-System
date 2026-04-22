@@ -6,7 +6,7 @@ import os
 import uuid
 
 # Configuration
-NUM_RECORDS = 20000
+NUM_RECORDS = 100000
 OUTPUT_FILE = '../data/raw_api_logs.csv'
 ENDPOINTS = [
     '/api/v1/users',
@@ -63,6 +63,9 @@ def generate_logs():
                 elif error_type == 'missing_endpoint':
                     endpoint = ''
                     
+            if (i + 1) % 10000 == 0:
+                print(f"   ... Generated {i + 1} records")
+            
             writer.writerow([ip, endpoint, status, timestamp, execution_time, rows_scanned, joins_count])
 
     print(f"✅ Successfully generated {NUM_RECORDS} log records in {OUTPUT_FILE}")
